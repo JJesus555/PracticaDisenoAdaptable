@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.reply.ui
 
 import android.widget.Toast
@@ -21,21 +6,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -48,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.example.reply.R
@@ -67,13 +49,10 @@ fun ReplyDetailsScreen(
     }
     Box(modifier = modifier) {
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding(),
-            ),
-            modifier = Modifier
-                .testTag(stringResource(R.string.details_screen))
+            modifier = modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top))
         ) {
             item {
                 if (isFullScreen) {
@@ -82,12 +61,20 @@ fun ReplyDetailsScreen(
                         replyUiState,
                         Modifier
                             .fillMaxWidth()
-                            .padding(
-                                bottom = dimensionResource(R.dimen.detail_topbar_padding_bottom),
-                                top = dimensionResource(R.dimen.topbar_padding_vertical)
-                            )
+                            .padding(bottom = dimensionResource(R.dimen.detail_topbar_padding_bottom))
                     )
+
                 }
+                ReplyDetailsScreenTopBar(
+                    onBackPressed,
+                    replyUiState,
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            bottom = dimensionResource(R.dimen.detail_topbar_padding_bottom),
+                            top = dimensionResource(R.dimen.topbar_padding_vertical)
+                        )
+                )
                 ReplyEmailDetailsCard(
                     email = replyUiState.currentSelectedEmail,
                     mailboxType = replyUiState.currentMailbox,
@@ -95,7 +82,7 @@ fun ReplyDetailsScreen(
                     modifier = if (isFullScreen) {
                         Modifier.padding(horizontal = dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
                     } else {
-                        Modifier
+                        Modifier.padding(end = dimensionResource(R.dimen.detail_card_outer_padding_horizontal))
                     }
                 )
             }
@@ -120,7 +107,7 @@ private fun ReplyDetailsScreenTopBar(
                 .background(MaterialTheme.colorScheme.surface, shape = CircleShape),
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(id = R.string.navigation_back)
             )
         }
@@ -139,6 +126,7 @@ private fun ReplyDetailsScreenTopBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReplyEmailDetailsCard(
     email: Email,
@@ -307,7 +295,8 @@ private fun ActionButton(
         ) {
             Text(
                 text = text,
-                color = if (containIrreversibleAction) {
+                color =
+                if (containIrreversibleAction) {
                     MaterialTheme.colorScheme.onError
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
