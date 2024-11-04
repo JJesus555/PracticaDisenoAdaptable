@@ -1,4 +1,3 @@
-
 package com.example.reply
 
 import android.os.Bundle
@@ -51,14 +50,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(showBackground = true, widthDp = 1000)
 @Composable
-fun ReplyAppCompactPreview() {
+fun ReplyAppExpandedPreview() {
     ReplyTheme {
         Surface {
-            ReplyApp(
-                windowSize = WindowWidthSizeClass.Compact,
-            )
+            ReplyApp(windowSize = WindowWidthSizeClass.Expanded)
         }
     }
 }
