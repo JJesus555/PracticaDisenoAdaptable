@@ -211,11 +211,14 @@ private fun ReplyNavigationRail(
 }
 
 @Composable
+val bottomNavigationContentDescription = stringResource(R.string.navigation_bottom)
 private fun ReplyBottomNavigationBar(
     currentTab: MailboxType,
     onTabPressed: ((MailboxType) -> Unit),
     navigationItemContentList: List<NavigationItemContent>,
-    modifier: Modifier = Modifier
+    modifier = Modifier
+        .fillMaxWidth()
+        .testTag(bottomNavigationContentDescription)
 ) {
     NavigationBar(modifier = modifier) {
         for (navItem in navigationItemContentList) {
