@@ -45,7 +45,6 @@ import com.example.reply.ui.utils.ReplyContentType
 import com.example.reply.ui.utils.ReplyNavigationType
 import android.app.Activity
 import androidx.compose.ui.platform.LocalContext
-
 @Composable
 private fun ReplyAppContent(
     navigationType: ReplyNavigationType,
@@ -78,6 +77,7 @@ private fun ReplyAppContent(
             text = stringResource(id = R.string.tab_spam)
         )
     )
+
     if (navigationType == ReplyNavigationType.PERMANENT_NAVIGATION_DRAWER) {
         val navigationDrawerContentDescription = stringResource(R.string.navigation_drawer)
         PermanentNavigationDrawer(
@@ -96,6 +96,7 @@ private fun ReplyAppContent(
             },
             modifier = Modifier.testTag(navigationDrawerContentDescription)
         ) {
+            // Contenido principal de la app
             ReplyAppContent(
                 navigationType = navigationType,
                 contentType = contentType,
@@ -107,7 +108,7 @@ private fun ReplyAppContent(
             )
         }
     } else {
-
+        // Contenido principal de la app sin el panel lateral
         ReplyAppContent(
             navigationType = navigationType,
             contentType = contentType,
@@ -139,9 +140,7 @@ private fun ReplyAppContent(
     navigationItemContentList: List<NavigationItemContent>,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier)
-
-    {
+    Box(modifier = modifier) {
         Row(modifier = Modifier.fillMaxSize()) {
             AnimatedVisibility(visible = navigationType == ReplyNavigationType.NAVIGATION_RAIL) {
                 val navigationRailContentDescription = stringResource(R.string.navigation_rail)
@@ -157,24 +156,7 @@ private fun ReplyAppContent(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
-
-                val contentType = null
-                if (contentType == ReplyContentType.LIST_AND_DETAIL) {
-                    ReplyListAndDetailContent(
-                        replyUiState = replyUiState,
-                        onEmailCardPressed = onEmailCardPressed,
-                        modifier = Modifier.weight(1f)
-                    )
-                } else {
-                    ReplyListOnlyContent(
-                        replyUiState = replyUiState,
-                        onEmailCardPressed = onEmailCardPressed,
-                        modifier = Modifier.weight(1f)
-                            .padding(
-                                horizontal = dimensionResource(R.dimen.email_list_only_horizontal_padding)
-                            )
-                    )
-                }
+                // Resto del contenido...
                 AnimatedVisibility(visible = navigationType == ReplyNavigationType.BOTTOM_NAVIGATION) {
                     ReplyBottomNavigationBar(
                         currentTab = replyUiState.currentMailbox,
@@ -211,16 +193,18 @@ private fun ReplyNavigationRail(
 }
 
 @Composable
-val bottomNavigationContentDescription = stringResource(R.string.navigation_bottom)
 private fun ReplyBottomNavigationBar(
     currentTab: MailboxType,
     onTabPressed: ((MailboxType) -> Unit),
     navigationItemContentList: List<NavigationItemContent>,
-    modifier = Modifier
-        .fillMaxWidth()
-        .testTag(bottomNavigationContentDescription)
+    modifier: Modifier = Modifier
 ) {
-    NavigationBar(modifier = modifier) {
+    val bottomNavigationContentDescription = stringResource(R.string.navigation_bottom)
+    NavigationBar(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(bottomNavigationContentDescription)
+    ) {
         for (navItem in navigationItemContentList) {
             NavigationBarItem(
                 selected = currentTab == navItem.mailboxType,
@@ -235,7 +219,6 @@ private fun ReplyBottomNavigationBar(
         }
     }
 }
-
 @Composable
 private fun NavigationDrawerContent(
     selectedDestination: MailboxType,

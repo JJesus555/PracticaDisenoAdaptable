@@ -2,20 +2,19 @@ package com.example.reply.ui.utils
 
 class ReplyAppTest {
 
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun compactDevice_verifyUsingBottomNavigation() {
-        // Set up compact window
+    @TestExpandedWidth
+    fun expandedDevice_verifyUsingNavigationDrawer() {
+        // Set up expanded window
         composeTestRule.setContent {
             ReplyApp(
-                windowSize = WindowWidthSizeClass.Compact
+                windowSize = WindowWidthSizeClass.Expanded
             )
         }
-        // Bottom navigation is displayed
+        // Navigation drawer is displayed
         composeTestRule.onNodeWithTagForStringId(
-            R.string.navigation_bottom
+            R.string.navigation_drawer
         ).assertExists()
     }
 }
